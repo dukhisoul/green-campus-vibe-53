@@ -86,7 +86,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                   to={item.href}
                   className={cn(
                     "flex items-center px-4 py-2 text-sm font-medium transition-colors",
-                    location.pathname === item.href
+                    location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                       ? "bg-college-50 text-college-700 dark:bg-college-800 dark:text-college-300"
                       : "text-gray-600 hover:bg-gray-100 hover:text-college-600 dark:text-gray-400 dark:hover:bg-college-800/50 dark:hover:text-college-400",
                     isCollapsed ? "justify-center" : ""
