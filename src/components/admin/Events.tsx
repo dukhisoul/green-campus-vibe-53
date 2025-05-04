@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, PencilLine, Trash2, Filter, Calendar } from 'lucide-react';
+import { Search, Plus, Pencil, Trash2, Filter, Calendar } from 'lucide-react';
 import { eventsData } from '@/data/events';
 import { useToast } from '@/hooks/use-toast';
 
@@ -111,7 +110,7 @@ const AdminEvents = () => {
                   <TableCell className="text-right space-x-2">
                     <Link to={`/admin/events/${event.id}`}>
                       <Button variant="ghost" size="icon">
-                        <PencilLine className="h-4 w-4" />
+                        <Pencil className="h-4 w-4" />
                       </Button>
                     </Link>
                     <Button 

@@ -1,125 +1,108 @@
 
 import { useState } from 'react';
-import { Upload, Trash2, PlusCircle, Search, Filter, X, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { Pencil, Trash2, Plus, Search, Filter, Upload } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-// Mock gallery data
+// Sample gallery data
 const galleryData = [
   {
     id: 1,
-    title: "Campus Main Building",
+    title: "Campus Aerial View",
     category: "Campus",
-    url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80&ixlib=rb-4.0.3",
-    date: "2023-04-15"
+    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    description: "Aerial view of the main campus buildings and grounds",
+    dateAdded: "April 10, 2025",
+    addedBy: "Admin"
   },
   {
     id: 2,
-    title: "Science Fair 2023",
-    category: "Events",
-    url: "https://images.unsplash.com/photo-1544928147-79a2dbc1f669?w=800&auto=format&fit=crop&q=80&ixlib=rb-4.0.3",
-    date: "2023-02-10"
+    title: "Library Interior",
+    category: "Facilities",
+    image: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    description: "Modern library with study spaces and extensive collections",
+    dateAdded: "April 8, 2025",
+    addedBy: "Admin"
   },
   {
     id: 3,
-    title: "Graduation Ceremony",
+    title: "Science Fair 2025",
     category: "Events",
-    url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop&q=80&ixlib=rb-4.0.3",
-    date: "2023-05-20"
+    image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    description: "Students presenting their research projects at the annual science fair",
+    dateAdded: "April 5, 2025",
+    addedBy: "Admin"
   },
   {
     id: 4,
-    title: "Library Interior",
-    category: "Campus",
-    url: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&auto=format&fit=crop&q=80&ixlib=rb-4.0.3",
-    date: "2023-03-15"
+    title: "Graduation Ceremony",
+    category: "Events",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    description: "Class of 2025 graduation ceremony at the main auditorium",
+    dateAdded: "April 2, 2025",
+    addedBy: "Admin"
   },
   {
     id: 5,
-    title: "Football Championship",
-    category: "Sports",
-    url: "https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&auto=format&fit=crop&q=80&ixlib=rb-4.0.3",
-    date: "2023-06-05"
+    title: "Sports Complex",
+    category: "Facilities",
+    image: "https://images.unsplash.com/photo-1569517282132-25d22f4573e6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    description: "Modern indoor sports complex with multiple courts and facilities",
+    dateAdded: "March 28, 2025",
+    addedBy: "Admin"
   },
   {
     id: 6,
-    title: "Cultural Festival",
-    category: "Events",
-    url: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80&ixlib=rb-4.0.3",
-    date: "2023-02-25"
-  }
+    title: "Green Spaces",
+    category: "Campus",
+    image: "https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    description: "Beautiful green spaces and gardens around campus",
+    dateAdded: "March 25, 2025",
+    addedBy: "Admin"
+  },
 ];
 
 const AdminGallery = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [filter, setFilter] = useState<string | null>(null);
   
   // Get unique categories for filtering
   const categories = Array.from(new Set(galleryData.map(g => g.category)));
   
-  const filteredGallery = galleryData.filter(image => {
-    const matchesSearch = image.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === null || image.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+  const filteredGallery = galleryData.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                        (item.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
+    const matchesFilter = filter === null || item.category === filter;
+    return matchesSearch && matchesFilter;
   });
   
-  const handleSelectImage = (id: number) => {
-    setSelectedItems(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
-  };
-  
-  const handleSelectAll = () => {
-    if (selectedItems.length === filteredGallery.length) {
-      setSelectedItems([]);
-    } else {
-      setSelectedItems(filteredGallery.map(image => image.id));
-    }
-  };
-  
-  const handleDelete = () => {
-    if (selectedItems.length === 0) return;
-    
+  const handleDelete = (id: number) => {
     // Here we would typically delete from a database
     toast({
-      title: `${selectedItems.length} Image${selectedItems.length > 1 ? 's' : ''} Deleted`,
-      description: "The selected images have been removed successfully.",
+      title: "Image Deleted",
+      description: "The image has been deleted successfully.",
       variant: "destructive"
-    });
-    
-    setSelectedItems([]);
-  };
-  
-  const handleUpload = () => {
-    toast({
-      title: "Upload Started",
-      description: "Your images are being uploaded.",
     });
   };
   
   return (
-    <div className="space-y-6 p-6 animate-fade-in">
+    <div className="space-y-6 p-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Photo Gallery</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Gallery</h1>
           <p className="text-muted-foreground">
-            Manage the college photo gallery from this dashboard.
+            Manage all images in the college gallery.
           </p>
         </div>
-        <Button onClick={handleUpload} className="animate-scale-in">
-          <Upload className="mr-2 h-4 w-4" /> Upload Images
+        <Button>
+          <Plus className="mr-2 h-4 w-4" /> Add New Image
         </Button>
       </div>
       
-      <div className="flex flex-col md:flex-row gap-4 md:items-center">
+      <div className="flex flex-col sm:flex-row gap-4 items-center">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -133,8 +116,8 @@ const AdminGallery = () => {
         <div className="flex items-center gap-2 sm:w-auto w-full">
           <Filter className="h-4 w-4 text-muted-foreground" />
           <select 
-            value={selectedCategory || ''}
-            onChange={(e) => setSelectedCategory(e.target.value === '' ? null : e.target.value)}
+            value={filter || ''}
+            onChange={(e) => setFilter(e.target.value === '' ? null : e.target.value)}
             className="bg-background border border-input rounded-md h-10 px-3 py-2 text-sm"
           >
             <option value="">All Categories</option>
@@ -145,94 +128,55 @@ const AdminGallery = () => {
         </div>
       </div>
       
-      <div className="bg-background border rounded-md p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              checked={selectedItems.length === filteredGallery.length && filteredGallery.length > 0}
-              onCheckedChange={handleSelectAll}
-            />
-            <Label>Select All</Label>
-          </div>
-          
-          {selectedItems.length > 0 && (
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-muted-foreground">
-                {selectedItems.length} item{selectedItems.length > 1 ? 's' : ''} selected
-              </span>
-              <Button 
-                variant="destructive" 
-                size="sm"
-                onClick={handleDelete}
-              >
-                <Trash2 className="h-4 w-4 mr-2" /> Delete
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setSelectedItems([])}
-              >
-                <X className="h-4 w-4 mr-2" /> Clear Selection
-              </Button>
-            </div>
-          )}
-        </div>
-        
-        <Separator className="my-4" />
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredGallery.length > 0 ? (
-            filteredGallery.map((image) => (
-              <Card key={image.id} className={`overflow-hidden hover-scale animate-fade-in ${selectedItems.includes(image.id) ? 'ring-2 ring-primary' : ''}`}>
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                  <img 
-                    src={image.url} 
-                    alt={image.title} 
-                    className="object-cover w-full h-full transition-all duration-300 hover:scale-105"
-                  />
-                  <div className="absolute top-2 left-2">
-                    <Checkbox 
-                      checked={selectedItems.includes(image.id)}
-                      onCheckedChange={() => handleSelectImage(image.id)}
-                      className="bg-white/90 border-white"
-                    />
-                  </div>
-                  <div className="absolute top-2 right-2">
-                    <Badge variant="outline" className="bg-black/60 text-white border-none text-xs">
-                      {image.category}
-                    </Badge>
-                  </div>
-                </div>
-                <CardContent className="p-3">
-                  <div className="font-medium text-sm truncate">{image.title}</div>
-                  <div className="text-xs text-muted-foreground">{image.date}</div>
-                </CardContent>
-                <CardFooter className="p-3 pt-0 flex justify-between">
-                  <Button variant="ghost" size="sm">
-                    <PencilLine className="h-3 w-3 mr-1" /> Edit
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredGallery.length > 0 ? (
+          filteredGallery.map((item) => (
+            <div key={item.id} className="border rounded-md overflow-hidden group">
+              <div className="relative h-48 bg-gray-100">
+                <img 
+                  src={item.image} 
+                  alt={item.title} 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button variant="secondary" size="icon" className="rounded-full bg-white/90 backdrop-blur-sm">
+                    <Pencil className="h-4 w-4" />
                   </Button>
                   <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => handleDelete()}
-                    className="text-destructive hover:text-destructive"
+                    variant="destructive" 
+                    size="icon" 
+                    className="rounded-full bg-white/90 backdrop-blur-sm"
+                    onClick={() => handleDelete(item.id)}
                   >
-                    <Trash2 className="h-3 w-3 mr-1" /> Delete
+                    <Trash2 className="h-4 w-4" />
                   </Button>
-                </CardFooter>
-              </Card>
-            ))
-          ) : (
-            <div className="col-span-full flex flex-col items-center justify-center p-12 text-center">
-              <ImageIcon className="h-12 w-12 text-muted-foreground mb-3" />
-              <h3 className="font-medium text-lg">No images found</h3>
-              <p className="text-muted-foreground">Try adjusting your search or filters.</p>
-              <Button variant="outline" className="mt-4">
-                <PlusCircle className="h-4 w-4 mr-2" /> Add Images
-              </Button>
+                </div>
+              </div>
+              <div className="p-4 border-t">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-medium">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+                  </div>
+                  <Badge variant="outline">{item.category}</Badge>
+                </div>
+                <div className="mt-3 text-xs text-muted-foreground">
+                  Added on {item.dateAdded}
+                </div>
+              </div>
             </div>
-          )}
-        </div>
+          ))
+        ) : (
+          <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
+            <div className="rounded-full bg-secondary p-4 mb-4">
+              <Upload className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-medium">No images found</h3>
+            <p className="text-muted-foreground mt-1 max-w-md">
+              Try adjusting your search or filters, or add new images to the gallery.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -36,6 +36,10 @@ const Admin = () => {
     if (path === '/admin/faculty') {
       return <AdminFaculty />;
     }
+    if (path.startsWith('/admin/faculty/') && id) {
+      // Add Faculty Detail component when it's created
+      return <div className="p-6">Faculty Detail Page for ID: {id}</div>;
+    }
     
     // Events
     if (path === '/admin/events') {
