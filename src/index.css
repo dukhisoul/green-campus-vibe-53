@@ -2,117 +2,141 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
   :root {
-    --background: 142 76% 98%;
-    --foreground: 144 64% 16%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 144 64% 16%;
-
+    --card-foreground: 222.2 84% 4.9%;
+ 
     --popover: 0 0% 100%;
-    --popover-foreground: 144 64% 16%;
-
-    --primary: 142 56% 30%;
-    --primary-foreground: 142 76% 98%;
-
-    --secondary: 142 15% 90%;
-    --secondary-foreground: 142 56% 30%;
-
-    --muted: 142 15% 94%;
-    --muted-foreground: 144 30% 40%;
-
-    --accent: 142 30% 92%;
-    --accent-foreground: 142 56% 30%;
-
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 142 20% 88%;
-    --input: 142 20% 88%;
-    --ring: 142 56% 30%;
-
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
     --radius: 0.5rem;
 
-    --sidebar-background: 142 56% 30%;
-    --sidebar-foreground: 142 76% 98%;
-    --sidebar-primary: 142 76% 98%;
-    --sidebar-primary-foreground: 142 56% 30%;
-    --sidebar-accent: 142 56% 40%;
-    --sidebar-accent-foreground: 142 76% 98%;
-    --sidebar-border: 142 56% 20%;
-    --sidebar-ring: 142 76% 80%;
+    /* College theme colors */
+    --college-50: 143 76% 97%;
+    --college-100: 141 70% 94%;
+    --college-200: 141 64% 86%;
+    --college-300: 142 46% 69%;
+    --college-400: 142 40% 52%;
+    --college-500: 142 44% 42%;
+    --college-600: 143 50% 34%;
+    --college-700: 143 50% 27%;
+    --college-800: 145 48% 22%;
+    --college-900: 145 45% 19%;
+    --college-950: 148 45% 11%;
   }
-
+ 
   .dark {
-    --background: 142 36% 8%;
-    --foreground: 142 76% 98%;
-
-    --card: 142 40% 12%;
-    --card-foreground: 142 76% 98%;
-
-    --popover: 142 40% 12%;
-    --popover-foreground: 142 76% 98%;
-
-    --primary: 142 56% 50%;
-    --primary-foreground: 142 36% 8%;
-
-    --secondary: 142 25% 20%;
-    --secondary-foreground: 142 76% 98%;
-
-    --muted: 142 25% 20%;
-    --muted-foreground: 142 35% 70%;
-
-    --accent: 142 25% 25%;
-    --accent-foreground: 142 76% 98%;
-
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 142 25% 25%;
-    --input: 142 25% 25%;
-    --ring: 142 56% 50%;
-
-    --sidebar-background: 142 36% 12%;
-    --sidebar-foreground: 142 76% 98%;
-    --sidebar-primary: 142 56% 50%;
-    --sidebar-primary-foreground: 142 36% 8%;
-    --sidebar-accent: 142 36% 20%;
-    --sidebar-accent-foreground: 142 76% 98%;
-    --sidebar-border: 142 36% 20%;
-    --sidebar-ring: 142 56% 60%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
+  html, body, #root {
+    height: 100%;
+  }
 }
 
-.college-link {
-  @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-200;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+  
+  .hover-card {
+    @apply transition-all duration-200 hover:translate-y-[-4px];
+  }
 }
 
-.hover-card {
-  @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.image-hover {
-  @apply transition-all duration-300 hover:scale-105 hover:brightness-110;
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
-.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
-.stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
-.stagger-animation > *:nth-child(7) { animation-delay: 0.7s; }
-.stagger-animation > *:nth-child(8) { animation-delay: 0.8s; }
-.stagger-animation > *:nth-child(9) { animation-delay: 0.9s; }
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
